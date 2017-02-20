@@ -1,0 +1,35 @@
+!CVS Version: Revision: 1.9 $
+!GOC Validation Date: 02/20/2006 $
+!Submission Date: 1/27/2006
+!
+! The above "Submission Date" is when the annotation project provided
+! this file to the Gene Ontology Consortium (GOC).  The "GOC Validation
+! Date" indicates when this file was last changed as a result of a GOC
+! validation and filtering process.  The "CVS Version" above is the
+! GOC version of this file.
+!
+! Note: The contents of this file may differ from that submitted to the
+! GOC. The identifiers and syntax of the file have been checked, rows of
+! data not meeting the standards set by the GOC have been removed. This
+! file may also have annotations removed because the annotations for the
+! listed Taxonomy identifier are only allowed in a file provided by
+! another annotation project.  The original submitted file is available from:
+!  http://www.geneontology.org/gene-associations/submission/
+!
+! For information on which taxon are allowed in which files please see:
+!  http://www.geneontology.org/GO.annotation.shtml#script
+!
+!Project_name: GO Annotation @ EBI (GOA)
+!URL: http://www.ebi.ac.uk/GOA/index.html
+!Contact Email: goa@ebi.ac.uk
+!
+! All Gene Associations in this file have been removed by the GO Consortium.
+!
+! The submitted associations most likely stated an NCBI Taxonomy Identifier
+! for each association that is available from another GO member project.
+! The GO Consortium started filtering gene association files in October 2005
+! in a effort to minimize confusion resulting in redundancy between the
+! many projects providing gene  association files. At that time the Consortium
+! also started removing associations to obsolete GOIDs, IEA annotations older than
+! one year, and any association that did not meet the syntax defined for this file.
+!

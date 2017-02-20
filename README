@@ -1,0 +1,105 @@
+
+
+Installing and running GOtcha
+=============================
+
+Environment:
+
+It is much easier if the environment variable GOTCHA_LIB is set to the root 
+directory for the GOtcha installation. This will make command lines a lot 
+shorter as many options no longer need to be set explicitly. A line such as
+
+export GOTCHA_LIB=/path/to/GOtcha
+export PERL5LIB=$PERL5LIB:$GOTCHA_LIB/lib
+
+should be included in the .bashrc (for local install) or /etc/profile (for global install).
+
+or for csh users
+
+setenv GOTCHA_LIB /path/to/GOtcha
+setenv PERL5LIB $PERL5LIB:$GOTCHA_LIB/lib
+
+in the .cshrc file (local) or /etc/cshrc (global) 
+
+Install directory:
+
+The install directory /path/to/GOtcha is structured as:
+
+	/lib  	Perl modules
+		
+	/data	GOtcha format tables for GO and score calculation
+	
+	/db 	Blast databases
+	
+	/bin	Perl scripts.
+
+	/doc 	Manual and other documentation including an example gotcha.conf file.
+
+
+Installation:
+
+1. Create a directory in which to install GOtcha.
+
+2. Move to this directory and unpack the distribution there. This should create
+the directory structure above.
+
+3. Check the list of Perl dependencies and ensure all the necessary modules are
+installed.
+
+4. Determine where the local Perl interpreter is. You may need to edit the 
+first line in each of the scripts in the /bin directory to reflect the location
+of Perl.
+
+5. Determine where any site-specific installations of Perl modules are and 
+amend the 'use lib' lines appropriately or append these to the $PERL5LIB 
+environment variable.
+
+6. Add the $GOTCHA_LIB/bin directory to your path.
+	export PATH=$PATH:$GOTCHA_LIB/bin
+
+7. Add the GOtcha perl modules to the PERL5LIB variable.
+	export PERL5LIB=$PERL5LIB:$GOTCHA_LIB/lib
+
+8. Ensure the GOtcha scripts are executable
+	chmod +x $GOTCHA_LIB/bin/*.pl
+
+9. Try executing GOtcha as 
+	rungotcha.pl --help
+
+You should get a help screen indicating the many command line options for running GOtcha.
+
+
+Dependencies:
+
+GOtcha requires the following Perl Modules. Many are part of the standard Perl distribution.
+
+	BioPerl 	(Tested with 0.7 but newer versions should work) www.bioperl.org
+	Archive::Tar 	(This may be problematic. Tar archive support is unreliable)
+	GD		(required for the graphics drawing. A newer version that supports PNG is required.)
+
+GOtcha also requires the following software to be available in the PATH
+	blastall 	from the NCBI BLAST2 suite (www.ncbi.nih.gov)
+	seqret		from the EMBOSS suite (www.emboss.org)
+	infoseq		from the EMBOSS suite (www.emboss.org)
+ 
+License:
+	GOtcha is currently made availble under an academic collaboration license. 
+You may use and modify GOtcha but may not distribute it without permission from the author.
+
+If you wish to publish work that has made use of GOtcha then please contact the author, 
+Dr David Martin <david@compbio.dundee.ac.uk> for appropriate citation details.
+
+
+Running GOtcha:
+
+GOtcha needs to know the following:
+
+	Which databases you wish to use for annotation?
+	Which evidence codes you wish to include/exclude (deafult: all included)?
+	
+If GOTCHA_LIB is set then GOtcha can find the databases and data files in the 
+GOtcha installation. All these locations can be overwritten on the command line.
+
+GOtcha will automatically attempt to read the sequence format and type. Sequence type can be overridden (Nucleic acid, Protein or Auto (default)) on the comamnd line.
+
+See the full manual in docs/Manual.pdf for further information.

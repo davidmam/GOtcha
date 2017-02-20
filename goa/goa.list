@@ -1,0 +1,38 @@
+gene_association.cgd CGD taxon:5476
+gene_association.ddb Dictybase taxon:44689
+gene_association.fb FB taxon:7227
+gene_association.GeneDB_Pfalciparum GeneDB_Pfalciparum taxon:5833
+gene_association.GeneDB_Spombe GeneDB_Spombe taxon:4896
+gene_association.GeneDB_Tbrucei GeneDB_Tbrucei taxon:185431
+gene_association.GeneDB_tsetse gene_association.goa_arabidopsis gene_association.goa_chicken UniProt taxon:9031
+gene_association.goa_cow UniProt taxon:9913
+gene_association.goa_human UniProt taxon:9606
+gene_association.goa_mouse gene_association.goa_rat gene_association.goa_zebrafish gene_association.gramene_oryza GR_protein taxon:39947
+gene_association.mgi MGI taxon:10090
+gene_association.pseudocap PseudoCAP taxon:208964
+gene_association.rgd RGD taxon:10116
+gene_association.sgd SGD taxon:4932
+gene_association.tair TAIR taxon:3702
+gene_association.tigr_Aphagocytophilum TIGR_CMR taxon:212042
+gene_association.tigr_Banthracis TIGR_CMR taxon:198094
+gene_association.tigr_Cburnetii TIGR_CMR taxon:227377
+gene_association.tigr_Chydrogenoformans TIGR_CMR taxon:246194
+gene_association.tigr_Cjejuni TIGR_CMR taxon:195099
+gene_association.tigr_Cperfringens TIGR_CMR taxon:195103
+gene_association.tigr_Cpsychrerythraea TIGR_CMR taxon:167879
+gene_association.tigr_Dethenogenes TIGR_CMR taxon:243164
+gene_association.tigr_Echaffeensis TIGR_CMR taxon:205920
+gene_association.tigr_gene_index gene_association.tigr_Gsulfurreducens TIGR_CMR taxon:243231
+gene_association.tigr_Hneptunium TIGR_CMR taxon:228405
+gene_association.tigr_Lmonocytogenes TIGR_CMR taxon:265669
+gene_association.tigr_Mcapsulatus TIGR_CMR taxon:243233
+gene_association.tigr_Nsennetsu TIGR_CMR taxon:222891
+gene_association.tigr_Pfluorescens TIGR_CMR taxon:220664
+gene_association.tigr_Psyringae TIGR_CMR taxon:223283
+gene_association.tigr_Psyringae_phaseolicola TIGR_CMR taxon:319
+gene_association.tigr_Soneidensis TIGR_CMR taxon:211586
+gene_association.tigr_Spomeroyi TIGR_CMR taxon:246200
+gene_association.tigr_Tbrucei_chr2 TIGR_Tba1 taxon:5691
+gene_association.tigr_Vcholerae TIGR_CMR taxon:686
+gene_association.wb WB taxon:6239
+gene_association.zfin ZFIN taxon:7955

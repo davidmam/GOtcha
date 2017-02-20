@@ -1,0 +1,13 @@
+calib*
+gotcha_iea
+gotcha_noiea
+*~
+*.fasta.err
+*.fasta.old
+error
+go_*assocdb-tables
+sequence
+test
+*.mysql
+.svn
+svn*

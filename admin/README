@@ -1,0 +1,135 @@
+Updating GOtcha.
+
+1. download the latest GO release (assocdb-data file) then update the database with:
+zcat go_200512-assocdb-data.gz |mysql -u [dbuser] -h [dbhost] -p [dbname] 
+ 
+2. identify the taxonomic id for the species for which to build genomic datasets. This can be done by the following to get a list:
+	Download the GO Associations list from the GO site.
+	Parse the gene_association file download details.
+	Download these files
+	get the taxid from each file.
+
+# alternatively, go to the latest downloads page at GO.
+Download the list.
+	 wget http://geneontology.org/GO.current.annotations.shtml
+	grep -A 2 'class="spp"' GO.current.annotations.shtml | sed -e 's/\n//g' -e 's/<tr>/\n/g' -e 's/<[^>]*>/\t/g' | awk 'BEGIN{FS="\n"; RS="--";OFS="\t"; ORS="\n";} {print $1,$2, $3, $4,$5,$6,$7,$8,$9}' |sed -e 's/\t\t*/\t/g' -e 's/^\t//'|perl -e 'while (my $line=<STDIN>){ chomp $line; @f=split/\t/, $line; if (scalar @f==5){ @o=@f[0]; push @o, "\t", @f[1..5]; } else {@o=@f;} print join("\t",@o),"\n";}'|sort >species.list
+Edit to get a list of genus species etc. as a text file.
+Search with 
+awk '{print $1, $2, $3}'<species.list | uniq|awk '{print "select ncbi_taxa_id, genus, species from species where genus=:"$1": and species like :%"$2"%:;"}' |sed -e "s/:/'/g" |mysql [db settings] |grep -v genus >taxa.list
+
+Edit this list to match those species you wish to include (many bacteria have many strains.)
+
+prepare a comma separated list of NCBI id's with 
+
+ perl -e '@sp=(); while (<>){my ($s, $junk)=split /[ \t]+/, $_, 2; push @sp, $s;} print join (",", @sp)."\n";' <taxa.list >taxa.string
+
+
+3. Build the links and terms files using linkbuilder.pl and termbuilder.pl
+
+./termbuilder.pl -index terms.idx -godb terms.dat -outdir ../data
+
+./linkbuilder.pl -goindex links.idx -data links.dat -outdir ../data -taxid 212042,3702,162425,198094,9913,6239,195099,5476,246194,195103,167879,227377,7955,243164,44689,7227,205920,562,9031,243231,9606,228405,265669,148305,243233,10090,222891,4530,5833,208964,220664,223283,264730,10116,4932,4896,211586,185431,666
+
+the NCBI string can be obtained from the taxa.string file.
+
+
+
+4. Build the sequence databases with seqdbbuilder.pl
+
+(you may want to run with -test first to check the database definitions.
+
+ for p in `awk '{print $1}' <NOBACK/go_build/data/taxa.list` ; do ./seqdbbuilder.pl -taxid $p -outdir NOBACK/go_build/db; done 
+
+You might want to qsub this as 
+
+ for p in `awk '{print $1}' <../db/taxa.list` ; do qsub -e ../errors -o ../errors -cwd ./seqdbbuilder.pl -taxid $p -test -outdir ../db; done 
+
+
+#Note: Not all taxa have the complete set of gene products as sequence entries, nor do they necessarily link to the full length sequence.
+
+Check for sequence errors by grepping for formatdb at the end of the error output.
+
+Some genomes have trait loci annotated which have no sequence representation.
+
+Check the ENSEMBL definitions in dblib.pl (at the adaptor definition code and in getENSEMBL() ) to ensure your species of interest is represented.
+
+4a. You may need to download an updated version of the omniome. 
+
+wget -nd  ftp://ftp.jcvi.org/pub/data/Omniome_Database/my_sql_omniome/omniome/*
+wget ftp://ftp.jcvi.org/pub/data/Omniome_Database/my_sql_omniome/MakeMySqlOmniome.txt
+The tables and indexes can be dropped with 
+grep CREATE MakeMySqlOmniome.txt| sed -e 's/UNIQUE//' -e 's/CREATE/DROP/' |awk '{print $1, $2,$3";"}' | mysql [db credentials] omniome
+
+then rebuilt with 
+
+cat MakeMySqlOmniome.txt| mysql [db credentials]
+
+Then load the data from omniome.data.gz
+
+
+
+
+5. Run all the sequences in a 'leave one out' model.
+
+*This is Dundee specific as we run on a Grid Engine managed cluster with an Orcale DB.* 
+* you will need to edit calibrate.sh to add the options for -dbiconn -dbuser and -dbpass*
+create a run file with 
+./calibrate.sh NOBACK/go_build
+
+clean out the database table - log in to the DB and do
+
+drop table gotcharesult;
+
+create table gotcharesult(
+contigid integer not null,
+seqdb text not null,
+reprocess text,
+goterm integer not null,
+iscore float,
+var float,
+cscore float,
+pscore float,
+ontology text
+);
+
+(or for oracle > "truncate gotcharesult; Commit;")
+
+source the grid engine
+. /grid.master/default/common/settings.sh
+
+edit gotcharun.sh to take the last line for each db only. 
+
+source the gotcharun.sh script to perform the analyses.
+
+
+6. build the scoring tables.
+
+You can build a GOA file with the 'givenbuilder.pl' script. It takes as input the links.dat file. As long as GOTCHA_LIB is set it should just run.
+
+This can then be used to build the given_annots file as
+cat $GOTCHA_LIB/goa/db_*.goa > $GOTCHA_LIB/calibration/given_annots
+
+
+The GOtcha assigned GOA file should be built from the database.
+
+ foundbuilder.pl -dbiconn [dbi connection string for your gotcha results table] -dataroot $GOTCHA_LIB -taxa 10090,10116,148305,162425,167879,185431,195099,195103,198094,205920,208964,211586,212042,220664,222891,223283,227377,228405,243164,243231,243233,246194,264730,265669,3702,44689,4530,4896,4932,5476,562,5833,6239,666,7227,7955,9031,9606,9913
+
+
+This generates two files in $GOTCHA_LIB/calibration gotcha_iea and gotcha_noiea
+
+
+generate a calibration file with
+gocalibrate.pl given_annots predicted_annots 
+
+./gocalibrate.pl -annotations ../calibration/given_annots -results ../calibration/gotcha_iea -outfile ../calibration/calibfile
+
+and one without iea
+
+./gocalibrate.pl -annotations ../calibration/given_annots -results ../calibration/gotcha_iea -evidence IEA  -outfile ../calibration/calibfilenoiea 
+
+
+then build the score table with 
+
+scorebuilder.pl -scoreindex scores.idx -scoredb scores.dat -scoresall calibfile -scoresnoiea calibfilenoiea
+
+
